@@ -1,4 +1,4 @@
-package collector.sensor;
+package collector;
 
 import java.util.List;
 

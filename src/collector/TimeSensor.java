@@ -1,5 +1,4 @@
-package collector.sensor;
-
+package collector;
 
 import java.util.ArrayList;
 import java.util.List;

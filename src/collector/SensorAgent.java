@@ -2,9 +2,9 @@ package collector;
 
 import java.util.Map;
 
-import collector.sensor.Sensor;
-import collector.sensor.TemperatureSensor;
-import collector.sensor.TimeSensor;
+import collector.Sensor;
+import collector.TemperatureSensor;
+import collector.TimeSensor;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
