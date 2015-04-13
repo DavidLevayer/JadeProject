@@ -56,6 +56,16 @@ public class SensorAgent extends Agent {
 		mSensors.put(Sensor.TEMPERATURE_SENSOR, new TemperatureSensor());
 	}
 	
+	protected void takeDown() {
+		// On retire la station de l'annuaire
+		try {
+			DFService.deregister(this);
+		}
+		catch (FIPAException fe) {
+			fe.printStackTrace();
+		}
+	}
+	
 	private class OfferRequestsServer extends CyclicBehaviour {
 
 		private static final long serialVersionUID = 1L;
