@@ -1,5 +1,6 @@
 package collector;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import collector.Sensor;
@@ -52,6 +53,7 @@ public class SensorAgent extends Agent {
 	}
 	
 	private void initiateSensors(){
+		mSensors = new HashMap<Integer, Sensor<?>>();
 		mSensors.put(Sensor.TIME_SENSOR, new TimeSensor());
 		mSensors.put(Sensor.TEMPERATURE_SENSOR, new TemperatureSensor());
 	}

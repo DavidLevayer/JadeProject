@@ -24,7 +24,7 @@ public class ExplorerAgent extends Agent {
 	 */
 	protected void setup() {
 
-		addBehaviour(new TickerBehaviour(this, 5000) {
+		addBehaviour(new TickerBehaviour(this, 2000) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -59,25 +59,27 @@ public class ExplorerAgent extends Agent {
 		private static final long serialVersionUID = 1L;
 
 		private MessageTemplate replyTemplate;
-		private String result;
+		private String result = "";
 		private int replieNumber;
 
 		private final static int ASK_INFO = 0;
 		private final static int COLLECT_ANSWERS = 1;
 		private final static int SHOW_INFO = 2;
+		private final static int DONE = 3;
 		private int state = ASK_INFO;
 
 		@Override
 		public void action() {
 			switch(state){
-			case ASK_INFO:
+			
+			case ASK_INFO:				
 				replieNumber = 0;
 				// On prend contact avec toutes les stations
 				ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
 				for (int i = 0; i < stationAgents.length; ++i) {
 					cfp.addReceiver(stationAgents[i]);
 				}
-				cfp.setContent(String.valueOf(Sensor.SERVICE_GETSTATIONINFO));
+				cfp.setContent(String.valueOf(Sensor.SERVICE_GETSERVICEINFO));
 				// L'identifiant permet de savoir de quelle conversation il s'agit
 				cfp.setConversationId("station-info");
 				cfp.setReplyWith("cfp"+System.currentTimeMillis());
@@ -87,8 +89,8 @@ public class ExplorerAgent extends Agent {
 				replyTemplate = MessageTemplate.and(MessageTemplate.MatchConversationId("station-info"),
 						MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
 
-				state = SHOW_INFO;
-
+				state = COLLECT_ANSWERS;
+				
 				break;
 
 			case COLLECT_ANSWERS:
@@ -97,7 +99,7 @@ public class ExplorerAgent extends Agent {
 				if (reply != null) {
 					// Traitement de la réponse "demande d'informations"
 					if (reply.getPerformative() == ACLMessage.INFORM) {
-						result = reply.getContent();
+						result = result.concat(reply.getContent()+"\n");
 					}
 					replieNumber++;
 					if (replieNumber >= stationAgents.length) {
@@ -110,16 +112,16 @@ public class ExplorerAgent extends Agent {
 				break;
 
 			case SHOW_INFO:
-				System.out.println("Information:" +result);
+				System.out.println("Information:\n" +result);
 				myAgent.doDelete();
+				state = DONE;
 				break;
 			}			
 		}
 
 		@Override
 		public boolean done() {
-			// TODO Auto-generated method stub
-			return false;
+			return (state==DONE);
 		}
 
 	}

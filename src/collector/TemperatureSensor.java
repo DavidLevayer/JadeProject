@@ -12,8 +12,7 @@ public class TemperatureSensor implements Sensor<Float> {
 
 	@Override
 	public String getInformation() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Temperature Sensor (return int values)";
 	}
 
 	@Override
