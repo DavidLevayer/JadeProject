@@ -11,6 +11,8 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 public class SensorAgent extends Agent {
 
@@ -60,7 +62,34 @@ public class SensorAgent extends Agent {
 
 		@Override
 		public void action() {
-			// TODO Auto-generated method stub
+			
+			// Récupération du message
+			MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+			ACLMessage msg = myAgent.receive(mt);
+			
+			if (msg != null) {			
+				
+				String content = msg.getContent();
+				ACLMessage reply = msg.createReply();
+				reply.setPerformative(ACLMessage.INFORM);
+				
+				switch(Integer.valueOf(content)){
+				case Sensor.SERVICE_GETSTATIONINFO:
+					reply.setContent("Agent station name: "+getName());
+					break;
+				case Sensor.SERVICE_GETSERVICEINFO:
+					String temp = new String();
+					for(Sensor<?> s: mSensors.values())
+						temp = temp.concat(s.getInformation()+"\n");
+					reply.setContent(temp);
+					break;
+				}
+				
+				myAgent.send(reply);
+			}
+			else {
+				block();
+			}
 			
 		}
 		

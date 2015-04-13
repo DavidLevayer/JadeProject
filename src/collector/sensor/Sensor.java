@@ -10,6 +10,9 @@ public interface Sensor<U> {
 	public final static int LIGHT_SENSOR = 2;
 	public final static int HUMIDITY_SENSOR = 3;
 	
+	public final static int SERVICE_GETSTATIONINFO = 0;
+	public final static int SERVICE_GETSERVICEINFO = 1;
+	
 	public int getType();
 	public String getInformation();
 	public List<U> getValues();
