@@ -4,11 +4,11 @@ package collector.sensor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimeSensor implements SensorInterface<Long> {
+public class TimeSensor implements Sensor<Long> {
 
 	@Override
 	public int getType() {
-		return SensorInterface.TIME_SENSOR;
+		return Sensor.TIME_SENSOR;
 	}
 
 	@Override

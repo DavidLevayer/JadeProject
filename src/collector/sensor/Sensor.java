@@ -2,7 +2,7 @@ package collector.sensor;
 
 import java.util.List;
 
-public interface SensorInterface<U> {
+public interface Sensor<U> {
 
 
 	public final static int TIME_SENSOR = 0;

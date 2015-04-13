@@ -2,7 +2,7 @@ package collector.sensor;
 
 import java.util.List;
 
-public class TemperatureSensor implements SensorInterface<Float> {
+public class TemperatureSensor implements Sensor<Float> {
 
 	@Override
 	public int getType() {

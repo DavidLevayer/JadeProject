@@ -2,7 +2,7 @@ package collector;
 
 import java.util.Map;
 
-import collector.sensor.SensorInterface;
+import collector.sensor.Sensor;
 import collector.sensor.TemperatureSensor;
 import collector.sensor.TimeSensor;
 import jade.core.Agent;
@@ -16,7 +16,7 @@ public class SensorAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	
-	Map<Integer,SensorInterface<?>> mSensors;
+	Map<Integer,Sensor<?>> mSensors;
 	
 	/**
 	 * Fonction appelée lors de la création de l'agent
@@ -50,8 +50,8 @@ public class SensorAgent extends Agent {
 	}
 	
 	private void initiateSensors(){
-		mSensors.put(SensorInterface.TIME_SENSOR, new TimeSensor());
-		mSensors.put(SensorInterface.TEMPERATURE_SENSOR, new TemperatureSensor());
+		mSensors.put(Sensor.TIME_SENSOR, new TimeSensor());
+		mSensors.put(Sensor.TEMPERATURE_SENSOR, new TemperatureSensor());
 	}
 	
 	private class OfferRequestsServer extends CyclicBehaviour {
