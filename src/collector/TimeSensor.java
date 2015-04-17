@@ -45,4 +45,9 @@ public class TimeSensor implements Sensor<Long> {
 		return values[(pos-1)%valueSize];
 	}
 
+	@Override
+	public String getName() {
+		return "TimeSensor";
+	}
+
 }

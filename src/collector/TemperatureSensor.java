@@ -54,4 +54,9 @@ public class TemperatureSensor implements Sensor<Float> {
 		return values[(pos-1)%valueSize];
 	}
 
+	@Override
+	public String getName() {
+		return "TemperatureSensor";
+	}
+
 }
