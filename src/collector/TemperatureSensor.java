@@ -1,13 +1,42 @@
 package collector;
 
-import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TemperatureSensor implements Sensor<Float> {
 
+	private final static int valueSize = 10;
+	
+	private final static float minTemperature = 15f;
+	private final static float maxTemperature = 30f;
+	
+	private Random rand;
+	private Float[] values;
+	private int pos;
+	
+	public TemperatureSensor() {
+		rand = new Random();
+		values = new Float[valueSize];
+		pos = 0;
+		
+		Timer timer = new Timer();
+		TimerTask minuteTask = new TimerTask() {
+			
+			@Override
+			public void run() {
+				float value = minTemperature + (rand.nextFloat() * ((1 + maxTemperature) - minTemperature));
+				values[pos] = Float.valueOf(value);
+				pos = (pos + 1) % valueSize;
+			}
+		};
+		
+		timer.schedule(minuteTask, 60000);
+	}
+	
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Sensor.TEMPERATURE_SENSOR;
 	}
 
 	@Override
@@ -16,15 +45,13 @@ public class TemperatureSensor implements Sensor<Float> {
 	}
 
 	@Override
-	public List<Float> getValues() {
-		// TODO Auto-generated method stub
-		return null;
+	public Float[] getValues() {
+		return values;
 	}
 
 	@Override
 	public Float getLastValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return values[(pos-1)%valueSize];
 	}
 
 }

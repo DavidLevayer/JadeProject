@@ -1,7 +1,5 @@
 package collector;
 
-import java.util.List;
-
 public interface Sensor<U> {
 
 
@@ -15,6 +13,6 @@ public interface Sensor<U> {
 	
 	public int getType();
 	public String getInformation();
-	public List<U> getValues();
+	public U[] getValues();
 	public U getLastValue();
 }
