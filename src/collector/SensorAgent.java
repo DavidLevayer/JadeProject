@@ -80,6 +80,7 @@ public class SensorAgent extends Agent {
 			
 			if (msg != null) {			
 				
+				System.out.println("Request: "+msg.getContent());
 				String[] content = msg.getContent().split("#");
 				ACLMessage reply = msg.createReply();
 				reply.setPerformative(ACLMessage.INFORM);
@@ -100,9 +101,10 @@ public class SensorAgent extends Agent {
 				case Sensor.SERVICE_GETLASTVALUE:
 					// On récupère les capteurs désirés par l'agent
 					sensorIDs = Arrays.asList(content[1].split(";"));
+					System.out.println(sensorIDs);
 					for(Sensor<?> s: mSensors.values()){
 						// Si le capteur est "intéressant"
-						if(sensorIDs.contains(s.getType())){
+						if(sensorIDs.contains(String.valueOf(s.getType()))){
 							// On ajoute la dernière valeur qu'il a enregistré
 							temp = temp.concat(s.getName()+":"+s.getLastValue().toString()+"\n");
 						}							
@@ -114,12 +116,13 @@ public class SensorAgent extends Agent {
 					sensorIDs = Arrays.asList(content[1].split(";"));
 					for(Sensor<?> s: mSensors.values()){
 						// Si le capteur est "intéressant"
-						if(sensorIDs.contains(s.getType())){
+						if(sensorIDs.contains(String.valueOf(s.getType()))){
 							// On ajoute les dernières valeurs qu'il a enregistré
 							Object[] values = s.getValues();
 							temp = temp.concat(s.getName()+":");
-							for(Object o: values)
-								temp = temp.concat(o.toString()+";");
+							for(int i=0; i<values.length; i++)
+								if(values[i]!=null)
+									temp = temp.concat(values[i].toString()+";");
 							temp = temp.concat("\n");
 						}							
 					}	

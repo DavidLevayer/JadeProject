@@ -12,6 +12,9 @@ public class TimeSensor implements Sensor<Long> {
 	
 	public TimeSensor(){
 		
+		values = new Long[valueSize];
+		pos = 0;
+		
 		Timer timer = new Timer();
 		TimerTask minuteTask = new TimerTask() {
 			
@@ -22,7 +25,7 @@ public class TimeSensor implements Sensor<Long> {
 			}
 		};
 		
-		timer.schedule(minuteTask, 60000);
+		timer.scheduleAtFixedRate(minuteTask, 0, 2000);
 	}
 	
 	@Override

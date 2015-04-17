@@ -1,5 +1,8 @@
 package collector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import collector.Sensor;
 import jade.core.AID;
 import jade.core.Agent;
@@ -79,7 +82,12 @@ public class ExplorerAgent extends Agent {
 				for (int i = 0; i < stationAgents.length; ++i) {
 					cfp.addReceiver(stationAgents[i]);
 				}
-				cfp.setContent(String.valueOf(Sensor.SERVICE_GETSERVICEINFO));
+				
+				// Création de la requête
+				List<Integer> sensorIDs = new ArrayList<Integer>();
+				sensorIDs.add(Sensor.TIME_SENSOR);
+				sensorIDs.add(Sensor.TEMPERATURE_SENSOR);
+				cfp.setContent(buildRequest(Sensor.SERVICE_GETVALUES, sensorIDs));
 				// L'identifiant permet de savoir de quelle conversation il s'agit
 				cfp.setConversationId("station-info");
 				cfp.setReplyWith("cfp"+System.currentTimeMillis());
@@ -126,4 +134,12 @@ public class ExplorerAgent extends Agent {
 
 	}
 
+	private String buildRequest(int valueOrValues, List<Integer> sensorIDs){
+		String res = new String();
+		res = String.valueOf(valueOrValues) + "#";
+		for(Integer i: sensorIDs)
+			res = res.concat(String.valueOf(i)+";");
+		res = res.substring(0, res.length()-1);
+		return res;
+	}
 }

@@ -16,9 +16,10 @@ public class TemperatureSensor implements Sensor<Float> {
 	private int pos;
 	
 	public TemperatureSensor() {
+		
 		rand = new Random();
 		values = new Float[valueSize];
-		pos = 0;
+		pos = 0; 
 		
 		Timer timer = new Timer();
 		TimerTask minuteTask = new TimerTask() {
@@ -31,7 +32,7 @@ public class TemperatureSensor implements Sensor<Float> {
 			}
 		};
 		
-		timer.schedule(minuteTask, 60000);
+		timer.scheduleAtFixedRate(minuteTask, 0, 2000);
 	}
 	
 	@Override
