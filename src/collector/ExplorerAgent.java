@@ -42,10 +42,10 @@ public class ExplorerAgent extends Agent {
 				try{
 					DFAgentDescription[] results = DFService.search(myAgent, dfd);
 					stationAgents = new AID[results.length];
-					System.out.println("Stations found:");
+					//System.out.println("Stations found:");
 					for(int i=0; i<results.length;i++){
 						stationAgents[i] = results[i].getName();
-						System.out.println(stationAgents[i].getName());
+						//System.out.println(stationAgents[i].getName());
 					}
 				} catch (FIPAException fe) {
 					fe.printStackTrace();
