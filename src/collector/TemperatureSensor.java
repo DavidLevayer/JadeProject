@@ -1,5 +1,6 @@
 package collector;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,7 +28,9 @@ public class TemperatureSensor implements Sensor<Float> {
 			@Override
 			public void run() {
 				float value = minTemperature + (rand.nextFloat() * ((1 + maxTemperature) - minTemperature));
-				values[pos] = Float.valueOf(value);
+				DecimalFormat df = new DecimalFormat(); 
+				df.setMaximumFractionDigits(1);
+				values[pos] = Float.valueOf(df.format(value));
 				pos = (pos + 1) % valueSize;
 			}
 		};
