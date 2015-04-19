@@ -35,7 +35,7 @@ public class StationUI extends JFrame implements ActionListener {
 
 		panel = new JPanel();
 		sensors = SensorManager.getSensors();
-		panel.setLayout(new GridLayout(1, 0));		
+		panel.setLayout(new GridLayout(0, 1));		
 
 		boxes = new JCheckBox[sensors.length];
 		for(int i=0; i<sensors.length; i++){
