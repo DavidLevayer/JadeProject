@@ -17,7 +17,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class SensorAgent extends Agent {
+public class StationAgent extends Agent {
 
 	private static final long serialVersionUID = 1L;
 	
