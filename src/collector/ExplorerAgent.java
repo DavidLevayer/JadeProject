@@ -1,9 +1,7 @@
 package collector;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import collector.Sensor;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -21,6 +19,8 @@ public class ExplorerAgent extends Agent {
 
 	// La liste des stations accessibles
 	private AID[] stationAgents;
+	// Requête envoyé aux stations
+	private String request;
 
 	/**
 	 * Fonction appelée lors de la création de l'agent
@@ -51,10 +51,19 @@ public class ExplorerAgent extends Agent {
 					fe.printStackTrace();
 				}
 
-				// On demande effectue une requête pour demander des informations
-				myAgent.addBehaviour(new InformationRequest());
 			}
 		});
+		
+		ExplorerUI gui = new ExplorerUI(this);
+		gui.showGui();
+	}
+	
+	public void setResearch(int service, List<Integer> sensors){
+		
+		this.request = buildRequest(service, sensors);
+		
+		// On demande effectue une requête pour demander des informations
+		addBehaviour(new InformationRequest());		
 	}
 
 	private class InformationRequest extends Behaviour{
@@ -83,11 +92,7 @@ public class ExplorerAgent extends Agent {
 					cfp.addReceiver(stationAgents[i]);
 				}
 				
-				// Création de la requête
-				List<Integer> sensorIDs = new ArrayList<Integer>();
-				sensorIDs.add(Sensor.TIME_SENSOR);
-				sensorIDs.add(Sensor.TEMPERATURE_SENSOR);
-				cfp.setContent(buildRequest(Sensor.SERVICE_GETVALUES, sensorIDs));
+				cfp.setContent(request);
 				// L'identifiant permet de savoir de quelle conversation il s'agit
 				cfp.setConversationId("station-info");
 				cfp.setReplyWith("cfp"+System.currentTimeMillis());
@@ -121,7 +126,7 @@ public class ExplorerAgent extends Agent {
 
 			case SHOW_INFO:
 				System.out.println("Information:\n" +result);
-				myAgent.doDelete();
+				//myAgent.doDelete();
 				state = DONE;
 				break;
 			}			
