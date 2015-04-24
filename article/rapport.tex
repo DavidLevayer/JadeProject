@@ -194,9 +194,49 @@ private class MyBehavior extends Behavior {
 
 \section{Prototype réalisé}
 
+Le contexte choisi pour la réalisation d'un système multi-agents est décomposé en deux parties. La première est composée d'agents appelés ``stations". Une station comprend différents capteurs et offre plusieurs services. Le choix des capteurs est propre à chaque station, de même que le choix des services à implémenter\footnote{Dans notre implémentation de ce problème, toutes les stations fournissent les mêmes services.}. Une station ne meurt (désallocation de l'agent) que si l'utilisateur le demande ; autrement, elle se contente d'attendre des demandes d'agents et de les traiter. La seconde partie est constituée d'agents ``explorateurs". Un explorateur est créé avec plusieurs paramètres : le service qu'il recherche et, si besoin est, les capteurs associés. Le comportement de cet agent est plutôt simple : il commence par rechercher les stations présentes dans son environnement. Pour chaque station, il envoie un message indiquant qu'il souhaite accéder à l'un des services de la station. Si ce service requiert une liste de capteurs, il fournit la liste spécifiée lors de sa création. Les fonctionnalités offertes utilisent le concept de \textit{behavior} fourni par Jade (valable pour les deux catégories d'agents).\\
+
+Les services proposés par les stations sont relativement simples mais ils sont suffisant pour démontrer le potentiel du framework Jade. On trouve ainsi quatre services : demander le nom de la station, demander les capteurs disponibles sur la station, demander les dernières valeurs des capteurs de la station et demander toutes les valeurs des capteurs de la station. Les deux derniers services requièrent que l'explorateur spécifie les capteurs qui l'intéresse. L'ensemble des communications est réalisé grâce à des messages ACL (\textit{Agent Communication Language}). La nature et les paramètres de chaque requête sont codifiés dans le contenu du message (code pour le type de service et codes pour identifier les capteurs d'intérêt).\\
+
+Enfin, nous avons choisi de programmer deux interfaces graphiques afin de simplifier la configuration des agents. Ces interfaces permettent de spécifier les paramètres de lancement des agents mais également de la modifier durant l'exécution. On peut ainsi spécifier les capteurs disponibles sur une station ou préciser la tâche que doit accomplir un explorateur. Les figures Fig.~\ref{fig:station} et Fig.~\ref{fig:explorer} montrent les deux interfaces disponibles. Pour exécuter le prototype, il suffit de réaliser les étapes suivantes :\\
+
+\begin{enumerate}
+
+  \item Récupérer les fichiers sources du prototype ainsi que les librairie de Jade (\textit{jade.jar} et \textit{commons-codec-1.3.jar}). L'ensemble de ces fichiers est disponible à l'adresse suivante : \href{https://github.com/DavidLevayer/JadeProject}{[Projet Jade]}. Les étapes 2 et 3 supposent que les librairies sont placées dans le sous-dossier ./lib.\\
+  
+  \item Compiler les classes contenant les agents à utiliser (si ce n'est pas déjà le cas). On suppose que les agents en question sont dans /src/collector. Il suffit d'ouvrir un terminal et de saisir la commande suivante :
+  \begin{lstlisting}[language=bash,frame=none]
+  $ javac -cp lib/jade.jar -d classes src/collector/*.java
+  \end{lstlisting}
+
+  \item L'étape suivante consiste à démarrer l'interface principale de Jade (Fig.~\ref{fig:jade}). On part du principe que les classes compilées à l'étape précédente sont présentes dans le dossier ./classes. La commande suivante est alors utilisée pour lancer Jade :
+  \begin{lstlisting}[language=bash,frame=none]
+  $ java -cp lib/jade.jar:classes/ jade.Boot -gui
+  \end{lstlisting}
+  
+  \item Pour lancer les agents, il ne reste plus qu'à se placer dans le container choisi et créer un nouvel agent (en cliquant sur l'icône correspondante ou dans le menu contextuel accessible après un clic droit sur le container).
+  
+\end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=120pt]{images/station.png}
+\caption{Interface graphique d'une station}
+\label{fig:station}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=120pt]{images/explorer.png}
+\caption{Interface graphique d'un explorateur}
+\label{fig:explorer}
+\end{figure}
+
 \section{Conclusion}
 
+La programmation par agent est un véritable paradigme de programmation. Elle permet de modéliser un problème via un ensemble dynamique d'entités autonomes appelées agents. On peut faire une analogie entre un agent et un être vivant : il naît, accomplit son but puis meurt. Le framework Jade offre un panel d'outils permettant de développer des agents de manière simplifiée et en respectant les standards de l'IEEE. L'interface graphique du framework permet de répartir aisément les agents sur différentes plateformes hétérogènes, ce qui est largement appréciable pour le développement d'applications distribuées.\\
 
+La programmation par agent peut être vue comme un véritable patron architectural. Elle permet de résoudre plusieurs problèmes clés (souvent liés au réseau) tels que la préservation de la bande passante, la réduction des latences réseaux, la réduction du temps d'exécution ou encore la réparation des charges à l'intérieur d'un système complexe. Le développement d'agents est par ailleurs largement basé sur plusieurs patrons de programmation (encapsulés dans le code du framework) et n'empêche en rien la programmation de patrons de conception ``par dessus" la couche agent. C'est donc un outil de choix pour le développement d'applications distribuées.\\
 
 \begin{thebibliography}{56}
 
