@@ -21,8 +21,8 @@
 
 \lstset{frame=tb,
   language=Java,
+  captionpos=b,
   aboveskip=3mm,
-  belowskip=3mm,
   showstringspaces=false,
   columns=flexible,
   basicstyle={\small\ttfamily},
@@ -121,28 +121,82 @@ Tous les agents ne sont pas des agents mobiles. Un agent ``classique" s'exécute
 \label{fig:mobile}
 \end{figure}
 
-\subsection{Agents et patrons de conception}
+\subsection{Agents, patrons et modèles}
 \vspace*{1mm}
 
+Plusieurs patrons de programmation et de conception peuvent être identifiés lorsque l'on souhaite programmer des agents de manière simple et efficace. On peut notamment noter les patrons Observer, Strategy ou encore Visitor. Ces patrons simplifient grandement la programmation par agent en fixant un cadre propre et concret. On peut supposer que les frameworks tels que Jade intègrent ces patrons. Il convient également de noter qu'il est possible (et conseillé) d'implémenter un patron à l'intérieur d'un agent. Prenons l'exemple du patron Observer : il suffit d'ajouter une méthode \textit{notify} à l'agent ``modèle". Cette méthode contacte les agents observateurs via le système de messagerie. Chaque observateur doit de son côté définir une méthode \textit{update} qui met à jour l'agent en fonction du nouveau modèle.\\
 
+Il est important de noter que Jade fournit un système de \textit{behavior} pour programmer des agents. Cet outil facilite la séparation des préoccupations et permet également d'ajouter (et de réutiliser) facilement un patron de programmation (en l'ajoutant à un agent sous forme d'un nouveau comportement). Le fonctionnement des \textit{behavior} est décrit plus en détails dans la suite de ce document. Pour terminer, on peut affirmer que le paradigme de programmation par agents est lui-même un patron architectural. En effet, il apporte une solution à des problèmes récurrents : programmer efficacement des applications distribuées, rendre un système dynamique et autonome ou encore palier les limites de l'environnement (réseau non-fiable, faible bande passante, grande latence, etc).\\
 
-\section{Framework JADE}
+\section{Framework Jade}
+
+Jade (Java Agent Development Framework) est un framework logiciel développé dans le langage Java \cite{jade}. l'objectif affiché est simple : fournir un ensemble d'outils destinés à faciliter la programmation par agents. Jade fournit pour cela un \textit{middleware} permettant de déployer des agents via une interface graphique. Les agents peuvent être répartis sur plusieurs machines hétérogènes (systèmes d'exploitation différents) ; ils sont alors contrôlés à distance. Les avantages de Jade sont multiples : il est \textit{open-source}, facile à prendre en main et facile à utiliser. Il dispose par ailleurs d'une grande communauté et de nombreuses APIs. Il convient de noter que Jade requiert au minimum la version 5 de l'environnement Java (JDK) pour fonctionner.\\
+
+L'outil Jade fournit également un système de messagerie avancé. Ce dernier permet aux agents de communiquer entre eux via des messages. Chaque message contient des données (contenu du message) et des méta-données (destinataire, expéditeur, type de message, etc). Ce module respecte les normes FIPA (Foundation for Intelligent Physical Agents). Cette organisation, membre de l'IEEE, a pour but de définir promouvoir l'utilisation de systèmes multi-agents et de garantir l'inter-opérabilité de ces derniers, notamment en fixant des standard de communication. Les avantages de cette norme permettent notamment aux agents ``Jade" de communiquer avec des agents d'un autre framework (dès lors que ce dernier respecte lui aussi les normes FIPA).\\
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=240pt]{images/jade.png}
+\caption{Capture d'écran de l'interface fournie par Jade}
+\label{fig:jade}
+\end{figure}
+
+les agents lancés par Jade sont placés à l'intérieur de containers (figure Fig.~\ref{fig:jade}) Chaque container correspond à un environnement particulier. Les communications à l'intérieur d'un même container sont simplifiés ; néanmoins, il est tout à fait possible de communiquer avec des agents présents dans un autre container. Cette modélisation permet d'accentuer la séparation des préoccupations : on peut ainsi créer un container par application et lancer plusieurs applications dans la même interface. Il est également possible (toujours via l'interface) d'ajouter un \textit{remote container}. Deux conséquences majeurs résulte de l'ajout d'un container distant : il est possible de configurer (et de lancer) des agents à distance (sur le-dit container) et il est possible d'interagir avec les agents distants présents (envoi de messages). Cette partie du framework garantit donc la possibilité de développer facilement des applications distribuées.\\
+
+\begin{lstlisting}[caption=Création d'un agent, label=lst:agent, float=t]
+
+import jade.core.Agent;
+
+public class MyAgent extends Agent {
+
+    // Agent fields
+    private int myAttribut;
+    
+    // Called when an agent is created
+    protected void setup() {
+    
+        // Agent initialisation
+    }    
+}
+\end{lstlisting}
+
+Jade met à disposition de puissants outils permettant de construire des agents de manière modulaire. La création d'un objet de type agent est très simple et passe par un simple héritage (code List.~\ref{lst:agent}). L'initialisation d'un agent comprend souvent l'ajout de comportements, ou \textit{behaviors}. Un comportement définit les actions réalisables par l'agent et les conditions de réalisation. Un comportement doit définir deux méthodes ; la première est appelée lorsque l'on souhaite exécuter le code correspondant au comportement (action). La seconde permet de savoir si le comportement (et les actions associées) est achevé. La programmation de comportements est très modulaire et permet une large réutilisation de code. On peut partager certains comportements entre différents agents, notamment si l'on souhaite intégrer des patrons de programmation. On pourrait par exemple imaginer un comportement \textit{Observer} qui contiendrait le code du patron du même nom. Le code List.~\ref{lst:behavior} illustre la structure d'un comportement avec Jade.\\
+
+\begin{lstlisting}[caption=Agents et comportements, label=lst:behavior]
+
+import jade.core.Agent;
+import jade.core.Behavior;
+
+// Put this code into the Agent class
+// for example in setup() method
+addBehavior(new MyBehavior());
+
+// Class which define the behavior
+private class MyBehavior extends Behavior {
+
+    // Behavior fields
+    private int myAttribut;
+    
+    @Override
+    public void action() {
+    
+            // Behavior code
+    }
+    
+    @Override
+    public boolean done() {
+    
+            // true if the behavior is done
+            // false otherwise
+    }
+}
+\end{lstlisting}
 
 \section{Prototype réalisé}
 
 \section{Conclusion}
 
-\begin{lstlisting}
-// Hello.java
-import javax.swing.JApplet;
-import java.awt.Graphics;
 
-public class Hello extends JApplet {
-    public void paintComponent(Graphics g) {
-        g.drawString("Hello, world!", 65, 95);
-    }    
-}
-\end{lstlisting}
 
 \begin{thebibliography}{56}
 
@@ -154,6 +208,9 @@ O. Boissier, \emph{Multi-agent system}, support de cours, http://www.emse.fr/~bo
 
 \bibitem{gray}
 R. Gray, D. Kotz, G. Cybenko and D. Rus, \emph{Mobile agents: Motivations and state-of-the-art systems}, Tahyer School of Engineering, Dartmouth College, 2000.
+
+\bibitem{jade}
+TILAB, \emph{Jade Website}, http://jade.tilab.com, consulté le 2 avr. 2015.
 
 \end{thebibliography}
 
